@@ -1,10 +1,9 @@
 {
-    "name": "pxt-cesta-2",
+    "name": "pxt-cesta",
     "version": "1.0.0",
     "description": "",
     "dependencies": {
         "core": "*",
-        "radio": "*",
         "microphone": "*",
         "magicbit": "github:emakefun/pxt-magicbit#ee1b367329051c8b117ca4deb5f3a467e8d12720"
     },
