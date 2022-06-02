@@ -18,6 +18,7 @@ X = 0
 Y = 0
 rotation = 0
 
+currentZ = [0,0]
 
 def on_forever():
     pass
@@ -25,10 +26,7 @@ basic.forever(on_forever)
 
 
 def on_button_pressed_a():
-    M(0,30)
-    M(30,30)
-    M(30,0)
-    Z()
+    pass
 input.on_button_pressed(Button.A, on_button_pressed_a)
 
 def forward(distance):
@@ -102,6 +100,8 @@ def M(x,y):
     forward(Math.sqrt((x-X)**2 + (y-Y)**2))
     X = x
     Y = y
+    if currentZ == [0,0]:
+        currentZ = [X,Y]
 
 def m(x,y):
     global X,Y
@@ -109,7 +109,7 @@ def m(x,y):
 
 
 def Z():
-    M(0,0)
+    M(currentZ[0],currentZ[1])
 
 
 

@@ -18,14 +18,12 @@ let rotate_left_speed = 0.142
 let X = 0
 let Y = 0
 let rotation = 0
+let currentZ = [0, 0]
 basic.forever(function on_forever() {
     
 })
 input.onButtonPressed(Button.A, function on_button_pressed_a() {
-    M(0, 30)
-    M(30, 30)
-    M(30, 0)
-    Z()
+    
 })
 function forward(distance: number) {
     
@@ -96,6 +94,7 @@ function rotate_towards(angle: number) {
 }
 
 function M(x: number, y: number) {
+    let currentZ: number[];
     
     let dy = y - Y
     let dx = x - X
@@ -109,6 +108,10 @@ function M(x: number, y: number) {
     forward(Math.sqrt((x - X) ** 2 + (y - Y) ** 2))
     X = x
     Y = y
+    if (currentZ == [0, 0]) {
+        currentZ = [X, Y]
+    }
+    
 }
 
 function m(x: any, y: any) {
@@ -117,7 +120,7 @@ function m(x: any, y: any) {
 }
 
 function Z() {
-    M(0, 0)
+    M(currentZ[0], currentZ[1])
 }
 
 magicbit.MotorStopAll()
