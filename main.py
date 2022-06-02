@@ -3,6 +3,11 @@ offset2 = 19
 offset3 = 8
 offset4 = 16.5
 
+servo1 = magicbit.Servos.S1 #FL
+servo2 = magicbit.Servos.S2 #FR
+servo3 = magicbit.Servos.S3 #BL
+servo4 = magicbit.Servos.S4 #BR
+
 #calibrated speed in cm/ms, °/ms
 speed = 0.024
 rotate_right_speed = 0.125
@@ -28,27 +33,27 @@ input.on_button_pressed(Button.A, on_button_pressed_a)
 
 def forward(distance):
     global speed
-    magicbit.servo(magicbit.Servos.S1, 180-offset1)
-    magicbit.servo(magicbit.Servos.S2, 0+offset2)
-    magicbit.servo(magicbit.Servos.S4, 0+offset4)
-    magicbit.servo(magicbit.Servos.S3, 180-offset3)
+    magicbit.servo(servo1, 180-offset1)
+    magicbit.servo(servo2, 0+offset2)
+    magicbit.servo(servo4, 0+offset4)
+    magicbit.servo(servo3, 180-offset3)
     basic.pause(distance/speed)
-    magicbit.servo(magicbit.Servos.S1, 90)
-    magicbit.servo(magicbit.Servos.S2, 90)
-    magicbit.servo(magicbit.Servos.S4, 90)
-    magicbit.servo(magicbit.Servos.S3, 90)
+    magicbit.servo(servo1, 90)
+    magicbit.servo(servo2, 90)
+    magicbit.servo(servo4, 90)
+    magicbit.servo(servo3, 90)
         
 def rotate_right(degrees):
     global rotation, rotate_right_speed
-    magicbit.servo(magicbit.Servos.S1, 180-offset1)
-    magicbit.servo(magicbit.Servos.S2, 180-offset2)
-    magicbit.servo(magicbit.Servos.S4, 180-offset4)
-    magicbit.servo(magicbit.Servos.S3, 180-offset3)
+    magicbit.servo(servo1, 180-offset1)
+    magicbit.servo(servo2, 180-offset2)
+    magicbit.servo(servo4, 180-offset4)
+    magicbit.servo(servo3, 180-offset3)
     basic.pause(degrees/rotate_right_speed)
-    magicbit.servo(magicbit.Servos.S1, 90)
-    magicbit.servo(magicbit.Servos.S2, 90)
-    magicbit.servo(magicbit.Servos.S4, 90)
-    magicbit.servo(magicbit.Servos.S3, 90)
+    magicbit.servo(servo1, 90)
+    magicbit.servo(servo2, 90)
+    magicbit.servo(servo4, 90)
+    magicbit.servo(servo3, 90)
     if rotation + degrees > 360:
         rotation += degrees - 360
     else:
@@ -57,15 +62,15 @@ def rotate_right(degrees):
 
 def rotate_left(degrees):
     global rotation, rotate_left_speed
-    magicbit.servo(magicbit.Servos.S1, 0+offset1)
-    magicbit.servo(magicbit.Servos.S2, 0+offset2)
-    magicbit.servo(magicbit.Servos.S4, 0+offset4)
-    magicbit.servo(magicbit.Servos.S3, 0+offset3)
+    magicbit.servo(servo1, 0+offset1)
+    magicbit.servo(servo2, 0+offset2)
+    magicbit.servo(servo4, 0+offset4)
+    magicbit.servo(servo3, 0+offset3)
     basic.pause(degrees/rotate_left_speed)
-    magicbit.servo(magicbit.Servos.S1, 90)
-    magicbit.servo(magicbit.Servos.S2, 90)
-    magicbit.servo(magicbit.Servos.S4, 90)
-    magicbit.servo(magicbit.Servos.S3, 90)
+    magicbit.servo(servo1, 90)
+    magicbit.servo(servo2, 90)
+    magicbit.servo(servo4, 90)
+    magicbit.servo(servo3, 90)
     if rotation - degrees <= 0:
         rotation -= degrees - 360
     else:
