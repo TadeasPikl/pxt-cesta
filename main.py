@@ -26,8 +26,14 @@ basic.forever(on_forever)
 
 
 def on_button_pressed_a():
-    pass
+    next("M", 12.247422, 17.010309)
+    next("M", 204.80413, 6.4639169)
+    next("M", 180.30928, 178.94845)
+    next("H", 14.628865)
+    next("L", 172.65464, 88.963916)
+    next("Z")
 input.on_button_pressed(Button.A, on_button_pressed_a)
+
 
 def forward(distance):
     global speed
@@ -103,13 +109,27 @@ def M(x,y):
     if currentZ == [0,0]:
         currentZ = [X,Y]
 
-def m(x,y):
-    global X,Y
-    M(x+X,y+Y)
 
 
-def Z():
-    M(currentZ[0],currentZ[1])
+def next(command,par1=None,par2=None):
+    global X,Y,currentZ
+    if command == "M" or command == "L":
+        M(par1,par2)
+    elif command == "m" or command == "l":
+        M(par1+X,par2+Y)
+    elif command == "Z":
+        M(currentZ[0],currentZ[1])
+    elif command == "H":
+        M(par1,Y)
+    elif command == "h":
+        M(par1+X,Y)
+    elif command == "V":
+        M(X,par1)
+    elif command == "v":
+        M(X,par1+Y)
+
+    else:
+        raise Exception("undefined command")
 
 
 

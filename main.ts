@@ -23,7 +23,12 @@ basic.forever(function on_forever() {
     
 })
 input.onButtonPressed(Button.A, function on_button_pressed_a() {
-    
+    next("M", 12.247422, 17.010309)
+    next("M", 204.80413, 6.4639169)
+    next("M", 180.30928, 178.94845)
+    next("H", 14.628865)
+    next("L", 172.65464, 88.963916)
+    next("Z")
 })
 function forward(distance: number) {
     
@@ -114,13 +119,26 @@ function M(x: number, y: number) {
     
 }
 
-function m(x: any, y: any) {
+function next(command: string, par1: number = null, par2: number = null) {
     
-    M(x + X, y + Y)
-}
-
-function Z() {
-    M(currentZ[0], currentZ[1])
+    if (command == "M" || command == "L") {
+        M(par1, par2)
+    } else if (command == "m" || command == "l") {
+        M(par1 + X, par2 + Y)
+    } else if (command == "Z") {
+        M(currentZ[0], currentZ[1])
+    } else if (command == "H") {
+        M(par1, Y)
+    } else if (command == "h") {
+        M(par1 + X, Y)
+    } else if (command == "V") {
+        M(X, par1)
+    } else if (command == "v") {
+        M(X, par1 + Y)
+    } else {
+        control.fail("undefined command")
+    }
+    
 }
 
 magicbit.MotorStopAll()
