@@ -23,12 +23,7 @@ basic.forever(function on_forever() {
     
 })
 input.onButtonPressed(Button.A, function on_button_pressed_a() {
-    next("M", 12.247422, 17.010309)
-    next("M", 204.80413, 6.4639169)
-    next("M", 180.30928, 178.94845)
-    next("H", 14.628865)
-    next("L", 172.65464, 88.963916)
-    next("Z")
+    parse("M 150 0 L 75 200 L 225 200 Z")
 })
 function forward(distance: number) {
     
@@ -119,13 +114,13 @@ function M(x: number, y: number) {
     
 }
 
-function next(command: string, par1: number = null, par2: number = null) {
+function next(command: any, par1: number = null, par2: number = null) {
     
     if (command == "M" || command == "L") {
         M(par1, par2)
     } else if (command == "m" || command == "l") {
         M(par1 + X, par2 + Y)
-    } else if (command == "Z") {
+    } else if (command == "Z" || command == "z") {
         M(currentZ[0], currentZ[1])
     } else if (command == "H") {
         M(par1, Y)
@@ -139,6 +134,17 @@ function next(command: string, par1: number = null, par2: number = null) {
         control.fail("undefined command")
     }
     
+}
+
+function parse(commands: string) {
+    
+    let list = _py.py_string_split(commands)
+    for (let i = 0; i < list.length; i++) {
+        if (_py.py_string_isdigit(list[i]) && _py.py_string_isdigit(list[i + 1])) {
+            
+        }
+        
+    }
 }
 
 magicbit.MotorStopAll()

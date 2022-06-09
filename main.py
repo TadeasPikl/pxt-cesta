@@ -26,12 +26,7 @@ basic.forever(on_forever)
 
 
 def on_button_pressed_a():
-    next("M", 12.247422, 17.010309)
-    next("M", 204.80413, 6.4639169)
-    next("M", 180.30928, 178.94845)
-    next("H", 14.628865)
-    next("L", 172.65464, 88.963916)
-    next("Z")
+    parse("M 150 0 L 75 200 L 225 200 Z")
 input.on_button_pressed(Button.A, on_button_pressed_a)
 
 
@@ -117,7 +112,7 @@ def next(command,par1=None,par2=None):
         M(par1,par2)
     elif command == "m" or command == "l":
         M(par1+X,par2+Y)
-    elif command == "Z":
+    elif command == "Z" or command == "z":
         M(currentZ[0],currentZ[1])
     elif command == "H":
         M(par1,Y)
@@ -131,6 +126,11 @@ def next(command,par1=None,par2=None):
     else:
         raise Exception("undefined command")
 
-
+def parse(commands:str):
+    pass
+    list = commands.split()
+    for i in range(len(list)):
+        if list[i].isdigit() and list[i+1].isdigit():
+            pass
 
 magicbit.motor_stop_all()
