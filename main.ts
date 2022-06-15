@@ -3,13 +3,13 @@ let offset2 = 19
 let offset3 = 8
 let offset4 = 16.5
 let servo1 = PCAmotor.Servos.S1
-//  FL
+// FL
 let servo2 = PCAmotor.Servos.S2
-//  FR
+// FR
 let servo3 = PCAmotor.Servos.S3
-//  BL
+// BL
 let servo4 = PCAmotor.Servos.S4
-//  BR
+// BR
 //  calibrated speed in cm/ms, °/ms
 let speed = 0.024
 let rotate_right_speed = 0.125
@@ -19,12 +19,8 @@ let X = 0
 let Y = 0
 let rotation = 0
 let currentZ = [0, 0]
-bluetooth.startUartService()
 basic.forever(function on_forever() {
     
-})
-input.onButtonPressed(Button.A, function on_button_pressed_a() {
-    parse("M 1 2")
 })
 function forward(distance: number) {
     PCAmotor.Servo(servo1, 180 - offset1)
@@ -113,7 +109,10 @@ function M(x: number, y: number) {
     
 }
 
-function next2(command: string, par1: number = null, par2: number = null) {
+function next(command: string, par1: number = null, par2: number = null) {
+    let X: number;
+    let Y: number;
+    let rotation: number;
     if (command == "M" || command == "L") {
         M(par1, par2)
     } else if (command == "m" || command == "l") {
@@ -128,6 +127,10 @@ function next2(command: string, par1: number = null, par2: number = null) {
         M(X, par1)
     } else if (command == "v") {
         M(X, par1 + Y)
+    } else if (command == "reset") {
+        X = 0
+        Y = 0
+        rotation = 0
     } else {
         control.fail("undefined command")
     }
@@ -138,22 +141,27 @@ function parse(commands: string) {
     let list1 = my_split(commands)
     let list2 = []
     for (let i = 0; i < list1.length; i++) {
-        if (!isdigit(list1[i]) && isdigit(list1[i + 1])) {
-            if (isdigit(list1[i + 2])) {
-                list2.push([list1[i], list1[i + 1], list1[i + 2]])
+        if (!isdigit(list1[i])) {
+            if (isdigit(list1[i + 1])) {
+                if (isdigit(list1[i + 2])) {
+                    list2.push([list1[i], list1[i + 1], list1[i + 2]])
+                } else {
+                    list2.push([list1[i], list1[i + 1], null])
+                }
+                
             } else {
-                list2.push([list1[i], list1[i + 1], null])
+                list2.push([list1[i], null, null])
             }
             
         }
         
     }
     for (let k of list2) {
-        next2(k[0], parseInt(k[1]), parseInt(k[2]))
+        next(k[0], parseInt(k[1]), parseInt(k[2]))
     }
 }
 
-//  makecode doesn't have a way to find type
+//  makecode doesn't have type()
 function isdigit(value: string): boolean {
     let x = parseInt(value)
     if (isNaN(x)) {
@@ -163,12 +171,6 @@ function isdigit(value: string): boolean {
     return true
 }
 
-bluetooth.onUartDataReceived(serial.delimiters(Delimiters.NewLine), function on_uart_data_received() {
-    let received = bluetooth.uartReadUntil(serial.delimiters(Delimiters.NewLine))
-    let spliced = my_split(received)
-    basic.showString(received)
-    parse(received)
-})
 //  split() doesn't work in makecode https://github.com/microsoft/pxt/issues/8752
 function my_split(string: string): string[] {
     let split_value = []
@@ -189,4 +191,12 @@ function my_split(string: string): string[] {
     return split_value
 }
 
+bluetooth.startUartService()
 PCAmotor.MotorStopAll()
+basic.clearScreen()
+bluetooth.onUartDataReceived(serial.delimiters(Delimiters.NewLine), function on_uart_data_received() {
+    let received = bluetooth.uartReadUntil(serial.delimiters(Delimiters.NewLine))
+    basic.showIcon(IconNames.Happy)
+    parse(received.slice(0, -1))
+    basic.clearScreen()
+})

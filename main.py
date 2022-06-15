@@ -3,10 +3,10 @@ offset2 = 19
 offset3 = 8
 offset4 = 16.5
 
-servo1 = PCAmotor.Servos.S1# FL
-servo2 = PCAmotor.Servos.S2# FR
-servo3 = PCAmotor.Servos.S3# BL
-servo4 = PCAmotor.Servos.S4# BR
+servo1 = PCAmotor.Servos.S1 #FL
+servo2 = PCAmotor.Servos.S2 #FR
+servo3 = PCAmotor.Servos.S3 #BL
+servo4 = PCAmotor.Servos.S4 #BR
 
 # calibrated speed in cm/ms, °/ms
 speed = 0.024
@@ -20,15 +20,11 @@ rotation = 0
 
 currentZ = [0, 0]
 
-bluetooth.start_uart_service()
 
 def on_forever():
     pass
 basic.forever(on_forever)
 
-def on_button_pressed_a():
-    parse("M 1 2")
-input.on_button_pressed(Button.A, on_button_pressed_a)
 
 def forward(distance: number):
     PCAmotor.servo(servo1, 180 - offset1)
@@ -99,7 +95,7 @@ def M(x: number, y: number):
     if currentZ2 == [0, 0]:
         currentZ2 = [X, Y]
 
-def next2(command: str, par1:number = None, par2:number = None):
+def next(command: str, par1:number = None, par2:number = None):
     if command == "M" or command == "L":
         M(par1, par2)
     elif command == "m" or command == "l":
@@ -114,6 +110,10 @@ def next2(command: str, par1:number = None, par2:number = None):
         M(X, par1)
     elif command == "v":
         M(X, par1 + Y)
+    elif command == "reset":
+        X = 0
+        Y = 0
+        rotation = 0
 
     else:
         control.fail("undefined command")
@@ -122,16 +122,19 @@ def parse(commands: str):
     list1 = my_split(commands)
     list2 = []
     for i in range(len(list1)):
-        if (not isdigit(list1[i])) and isdigit(list1[i + 1]):
-            if isdigit(list1[i + 2]):
-                list2.append([list1[i], list1[i + 1], list1[i + 2]])
+        if not isdigit(list1[i]):
+            if isdigit(list1[i + 1]):
+                if isdigit(list1[i + 2]):
+                    list2.append([list1[i], list1[i + 1], list1[i + 2]])
+                else:
+                    list2.append([list1[i], list1[i + 1], None])
             else:
-                list2.append([list1[i], list1[i + 1], None])
+                list2.append([list1[i], None, None])
 
     for k in list2:
-        next2(k[0], int(k[1]), int(k[2]))
+        next(k[0], int(k[1]), int(k[2]))
 
-# makecode doesn't have a way to find type
+# makecode doesn't have type()
 def isdigit(value: str):
     x = int(value)
     if is_na_n(x):
@@ -140,12 +143,11 @@ def isdigit(value: str):
 
 def on_uart_data_received():
     received = bluetooth.uart_read_until(serial.delimiters(Delimiters.NEW_LINE))
-    spliced = my_split(received)
+    basic.show_icon(IconNames.HAPPY)
+    parse(received[:-1])
+    basic.clear_screen()
 
-    basic.show_string(received)
-    parse(received)
 
-bluetooth.on_uart_data_received(serial.delimiters(Delimiters.NEW_LINE), on_uart_data_received)
 
 # split() doesn't work in makecode https://github.com/microsoft/pxt/issues/8752
 def my_split(string:str):
@@ -162,4 +164,8 @@ def my_split(string:str):
 
     return split_value
 
+bluetooth.start_uart_service()
 PCAmotor.motor_stop_all()
+basic.clear_screen()
+
+bluetooth.on_uart_data_received(serial.delimiters(Delimiters.NEW_LINE), on_uart_data_received)
