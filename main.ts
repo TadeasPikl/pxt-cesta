@@ -22,6 +22,9 @@ let currentZ = [0, 0]
 basic.forever(function on_forever() {
     
 })
+input.onButtonPressed(Button.A, function on_button_pressed_a() {
+    parse("L 12 25")
+})
 function forward(distance: number) {
     PCAmotor.Servo(servo1, 180 - offset1)
     PCAmotor.Servo(servo2, 0 + offset2)

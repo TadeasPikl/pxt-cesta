@@ -25,8 +25,11 @@ def on_forever():
     pass
 basic.forever(on_forever)
 
+def on_button_pressed_a():
+    parse("L 12 25")
+input.on_button_pressed(Button.A, on_button_pressed_a)
 
-def forward(distance: number):
+def forward(distance:int):
     PCAmotor.servo(servo1, 180 - offset1)
     PCAmotor.servo(servo2, 0 + offset2)
     PCAmotor.servo(servo4, 0 + offset4)
@@ -37,7 +40,7 @@ def forward(distance: number):
     PCAmotor.servo(servo4, 90)
     PCAmotor.servo(servo3, 90)
 
-def rotate_right(degrees: number):
+def rotate_right(degrees:int):
     global rotation
     PCAmotor.servo(servo1, 180 - offset1)
     PCAmotor.servo(servo2, 180 - offset2)
@@ -53,7 +56,7 @@ def rotate_right(degrees: number):
     else:
         rotation += degrees
 
-def rotate_left(degrees2: number):
+def rotate_left(degrees2:int):
     global rotation
     PCAmotor.servo(servo1, 0 + offset1)
     PCAmotor.servo(servo2, 0 + offset2)
@@ -69,7 +72,7 @@ def rotate_left(degrees2: number):
     else:
         rotation -= degrees2
 
-def rotate_towards(angle: number):
+def rotate_towards(angle:int):
     if abs(rotation - angle) < 180:
         if angle > rotation:
             rotate_right(abs(rotation - angle))
@@ -80,7 +83,7 @@ def rotate_towards(angle: number):
     else:
         rotate_left(360 - abs(rotation - angle))
 
-def M(x: number, y: number):
+def M(x:int, y:int):
     global X, Y
     dy = y - Y
     dx = x - X
@@ -95,7 +98,7 @@ def M(x: number, y: number):
     if currentZ2 == [0, 0]:
         currentZ2 = [X, Y]
 
-def next(command: str, par1:number = None, par2:number = None):
+def next(command: str, par1:int = None, par2:int = None):
     if command == "M" or command == "L":
         M(par1, par2)
     elif command == "m" or command == "l":
@@ -146,7 +149,6 @@ def on_uart_data_received():
     basic.show_icon(IconNames.HAPPY)
     parse(received[:-1])
     basic.clear_screen()
-
 
 
 # split() doesn't work in makecode https://github.com/microsoft/pxt/issues/8752
