@@ -112,10 +112,8 @@ function M(x: number, y: number) {
     
 }
 
-function next(command: string, par1: number = null, par2: number = null) {
-    let X: number;
-    let Y: number;
-    let rotation: number;
+function next(command: string, par1: number = 0, par2: number = 0) {
+    
     if (command == "M" || command == "L") {
         M(par1, par2)
     } else if (command == "m" || command == "l") {
@@ -134,8 +132,6 @@ function next(command: string, par1: number = null, par2: number = null) {
         X = 0
         Y = 0
         rotation = 0
-    } else {
-        control.fail("undefined command")
     }
     
 }

@@ -20,7 +20,6 @@ rotation = 0
 
 currentZ = [0, 0]
 
-
 def on_forever():
     pass
 basic.forever(on_forever)
@@ -29,7 +28,7 @@ def on_button_pressed_a():
     parse("L 12 25")
 input.on_button_pressed(Button.A, on_button_pressed_a)
 
-def forward(distance:int):
+def forward(distance):
     PCAmotor.servo(servo1, 180 - offset1)
     PCAmotor.servo(servo2, 0 + offset2)
     PCAmotor.servo(servo4, 0 + offset4)
@@ -40,7 +39,7 @@ def forward(distance:int):
     PCAmotor.servo(servo4, 90)
     PCAmotor.servo(servo3, 90)
 
-def rotate_right(degrees:int):
+def rotate_right(degrees):
     global rotation
     PCAmotor.servo(servo1, 180 - offset1)
     PCAmotor.servo(servo2, 180 - offset2)
@@ -56,7 +55,7 @@ def rotate_right(degrees:int):
     else:
         rotation += degrees
 
-def rotate_left(degrees2:int):
+def rotate_left(degrees2):
     global rotation
     PCAmotor.servo(servo1, 0 + offset1)
     PCAmotor.servo(servo2, 0 + offset2)
@@ -72,7 +71,7 @@ def rotate_left(degrees2:int):
     else:
         rotation -= degrees2
 
-def rotate_towards(angle:int):
+def rotate_towards(angle):
     if abs(rotation - angle) < 180:
         if angle > rotation:
             rotate_right(abs(rotation - angle))
@@ -98,7 +97,8 @@ def M(x:int, y:int):
     if currentZ2 == [0, 0]:
         currentZ2 = [X, Y]
 
-def next(command: str, par1:int = None, par2:int = None):
+def next(command: str, par1:int = 0, par2:int = 0):
+    global X,Y,rotation
     if command == "M" or command == "L":
         M(par1, par2)
     elif command == "m" or command == "l":
@@ -118,8 +118,6 @@ def next(command: str, par1:int = None, par2:int = None):
         Y = 0
         rotation = 0
 
-    else:
-        control.fail("undefined command")
 
 def parse(commands: str):
     list1 = my_split(commands)
