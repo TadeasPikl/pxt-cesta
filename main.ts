@@ -128,48 +128,38 @@ function next(command: string, par1: number = 0, par2: number = 0) {
         M(X, par1)
     } else if (command == "v") {
         M(X, par1 + Y)
-    } else if (command == "reset") {
-        X = 0
-        Y = 0
-        rotation = 0
     }
     
 }
 
+// elif command == "reset":
+//     X = 0
+//     Y = 0
+//     rotation = 0
 function parse(commands: string) {
     let list1 = my_split(commands)
-    let list2 = []
-    for (let i = 0; i < list1.length; i++) {
-        if (!isdigit(list1[i])) {
-            if (isdigit(list1[i + 1])) {
-                if (isdigit(list1[i + 2])) {
-                    list2.push([list1[i], list1[i + 1], list1[i + 2]])
-                } else {
-                    list2.push([list1[i], list1[i + 1], null])
-                }
-                
-            } else {
-                list2.push([list1[i], null, null])
-            }
-            
-        }
-        
-    }
-    for (let k of list2) {
-        next(k[0], parseInt(k[1]), parseInt(k[2]))
-    }
+    // list2 = []
+    // for i in range(len(list1)):
+    //     if not isdigit(list1[i]):
+    //         if isdigit(list1[i + 1]):
+    //             if isdigit(list1[i + 2]):
+    //                 list2.append([list1[i], list1[i + 1], list1[i + 2]])
+    //             else:
+    //                 list2.append([list1[i], list1[i + 1], None])
+    //         else:
+    //             list2.append([list1[i], None, None])
+    // for k in list2:
+    //     next(k[0], int(k[1]), int(k[2]))
+    next(list1[0], parseInt(list1[1]), parseInt(list1[2]))
 }
 
 //  makecode doesn't have type()
-function isdigit(value: string): boolean {
-    let x = parseInt(value)
-    if (isNaN(x)) {
-        return false
-    }
-    
-    return true
-}
-
+// def isdigit(value: str):
+//     x = int(value)
+//     if is_na_n(x):
+//         return False
+//     return True
+// basic.clear_screen()
 //  split() doesn't work in makecode https://github.com/microsoft/pxt/issues/8752
 function my_split(string: string): string[] {
     let split_value = []
@@ -195,7 +185,6 @@ PCAmotor.MotorStopAll()
 basic.clearScreen()
 bluetooth.onUartDataReceived(serial.delimiters(Delimiters.NewLine), function on_uart_data_received() {
     let received = bluetooth.uartReadUntil(serial.delimiters(Delimiters.NewLine))
-    basic.showIcon(IconNames.Happy)
+    // basic.show_icon(IconNames.HAPPY)
     parse(received.slice(0, -1))
-    basic.clearScreen()
 })

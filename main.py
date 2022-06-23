@@ -113,40 +113,41 @@ def next(command: str, par1:int = 0, par2:int = 0):
         M(X, par1)
     elif command == "v":
         M(X, par1 + Y)
-    elif command == "reset":
-        X = 0
-        Y = 0
-        rotation = 0
+    #elif command == "reset":
+    #    X = 0
+    #    Y = 0
+    #    rotation = 0
 
 
 def parse(commands: str):
     list1 = my_split(commands)
-    list2 = []
-    for i in range(len(list1)):
-        if not isdigit(list1[i]):
-            if isdigit(list1[i + 1]):
-                if isdigit(list1[i + 2]):
-                    list2.append([list1[i], list1[i + 1], list1[i + 2]])
-                else:
-                    list2.append([list1[i], list1[i + 1], None])
-            else:
-                list2.append([list1[i], None, None])
+    #list2 = []
+    #for i in range(len(list1)):
+    #    if not isdigit(list1[i]):
+    #        if isdigit(list1[i + 1]):
+    #            if isdigit(list1[i + 2]):
+    #                list2.append([list1[i], list1[i + 1], list1[i + 2]])
+    #            else:
+    #                list2.append([list1[i], list1[i + 1], None])
+    #        else:
+    #            list2.append([list1[i], None, None])
 
-    for k in list2:
-        next(k[0], int(k[1]), int(k[2]))
+    #for k in list2:
+    #    next(k[0], int(k[1]), int(k[2]))
+    next(list1[0],int(list1[1]),int(list1[2]))
 
 # makecode doesn't have type()
-def isdigit(value: str):
-    x = int(value)
-    if is_na_n(x):
-        return False
-    return True
+#def isdigit(value: str):
+#    x = int(value)
+#    if is_na_n(x):
+#        return False
+#    return True
 
 def on_uart_data_received():
     received = bluetooth.uart_read_until(serial.delimiters(Delimiters.NEW_LINE))
-    basic.show_icon(IconNames.HAPPY)
+    #basic.show_icon(IconNames.HAPPY)
     parse(received[:-1])
-    basic.clear_screen()
+    #basic.clear_screen()
 
 
 # split() doesn't work in makecode https://github.com/microsoft/pxt/issues/8752
